@@ -1,19 +1,14 @@
-// d:\Dev\bpptkg-api\src\controllers\file.controller.ts
 import { RequestHandler } from "express";
 import googleDriveService from "../services/googleDrive.service";
 import { IFile, IFileResponse } from "../interfaces/file.interface";
 import mongoose from "mongoose";
 import RsamConfig from "../models/rsamConfig.model";
 
-// Multer tidak lagi diimpor atau dikonfigurasi di sini
-
 export default class FileController {
   static uploadMP3: RequestHandler<{}, IFileResponse> = async (req, res, next) => { // Tambahkan 'next'
     try {
       const file = req.file as IFile;
       if (!file) {
-        // Seharusnya sudah ditangani oleh multer.middleware atau file.validator
-        // Jika sampai sini dan file tidak ada, itu kondisi tak terduga.
         throw new Error("No file present in request after processing.");
       }
 
@@ -30,22 +25,24 @@ export default class FileController {
       console.log('Constructed download URL: ' + directDownloadUrl);
 
       // Pastikan ID ini valid atau didapatkan secara dinamis sesuai kebutuhan aplikasi Anda
-      const docId = new mongoose.Types.ObjectId("6810a7f1c99ff35d7545ec02");
+      // Jika ID ini tidak ada di database, maka RsamConfig.findById akan mengembalikan null
+      const docIdString = process.env.RSAM_CONFIG_ID; // Sebaiknya ID ini dinamis
+      const docId = new mongoose.Types.ObjectId(docIdString);
 
-      const updatedConfig = await RsamConfig.findOneAndUpdate(
-        { _id: docId },
-        {
-          audio_url: directDownloadUrl,
-          audio_name: result.name,
-        },
-        { new: true }
-      );
+      const rsamConfigDoc = await RsamConfig.findOne({ _id: docId });
 
-      console.log('Updated RsamConfig document:', updatedConfig);
-
-      if (!updatedConfig) {
-        throw new Error("RsamConfig document not found or failed to update!");
+      if (!rsamConfigDoc) {
+        throw new Error(`RsamConfig document with ID ${docIdString} not found! Cannot update.`);
       }
+
+      rsamConfigDoc.set({
+        audio_url: directDownloadUrl,
+        audio_name: result.name
+      });
+
+      const updatedConfig = await rsamConfigDoc.save();
+
+      console.log('Updated RsamConfig document (using findOne, set & save):', updatedConfig);
 
       res.json({
         success: true,
