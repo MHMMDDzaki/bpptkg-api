@@ -55,7 +55,7 @@ export default class AuthService {
       if (!user) throw new Error("User tidak ditemukan");
 
       const resetToken = crypto.randomBytes(20).toString("hex");
-      const resetTokenExpires = new Date(Date.now() + 3600000); // 1 jam
+      const resetTokenExpires = new Date(Date.now() + 1000); // 1 jam
 
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpires = resetTokenExpires;
