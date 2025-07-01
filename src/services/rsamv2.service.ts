@@ -49,7 +49,7 @@ function parseCustomCsv(csvData: string): IRsamData[] {
 // Fungsi untuk data terbaru
 export const getLatestRsamData = async (): Promise<IRsamData> => {
   const params = {
-    code: 'MEPAS_HHZ_VG_00',
+    code: 'MELAB_HHZ_VG_00',
     t1: '-0.020833', // 30 menit terakhir (30/1440 = 0.020833)
     rsamP: '10',
     tz: 'Asia/Jakarta',
@@ -84,7 +84,7 @@ export const getRsamDataByRange = async (range: string): Promise<IRsamRangeRespo
   const endTime = moment().tz('Asia/Jakarta');
 
   const params = {
-    code: 'MEPAS_HHZ_VG_00',
+    code: 'MELAB_HHZ_VG_00',
     t1: t1Value,
     rsamP: '10',
     tz: 'Asia/Jakarta',
