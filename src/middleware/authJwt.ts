@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { UserRole } from "../interfaces/user.interface";
+import { env } from "../config/env";
 
 // Menambahkan tipe kustom pada object Request Express
 declare global {
@@ -34,7 +35,7 @@ export const verifyToken = (
   }
 
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.JWT_SECRET!, (err: any, decoded: any) => {
+  jwt.verify(token, env.JWT_SECRET, (err: any, decoded: any) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
         return res

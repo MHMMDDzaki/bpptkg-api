@@ -4,18 +4,16 @@ import {
   IRsamData,
   IRsamRangeResponse
 } from '../interfaces/rsamv2.interface';
+import { env } from '../config/env';
 
-const API_BASE_URL = process.env.API_BPPTKG || 'http://192.168.0.45:16030/rsam/';
+const API_BASE_URL = env.API_BPPTKG;
 
 const RANGE_MAPPING: Record<string, number> = {
-  '30m': 30,
-  '1h': 60,
-  '2h': 120,
-  '4h': 240,
-  '8h': 480,
-  '16h': 960,
-  '1d': 1440,
-  '2d': 2880
+  '3h': 180,
+  '6h': 360,
+  '12h': 720,
+  '24h': 1440,
+  '48h': 2880
 };
 
 // Helper untuk parse CSV
@@ -50,7 +48,7 @@ function parseCustomCsv(csvData: string): IRsamData[] {
 export const getLatestRsamData = async (): Promise<IRsamData> => {
   const params = {
     code: 'MELAB_HHZ_VG_00',
-    t1: '-0.020833', // 30 menit terakhir (30/1440 = 0.020833)
+    t1: '-0.0006', // 30 menit terakhir (30/1440 = 0.020833)
     rsamP: '10',
     tz: 'Asia/Jakarta',
     csv: '1'

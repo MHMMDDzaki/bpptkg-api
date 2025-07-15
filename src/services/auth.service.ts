@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 import * as crypto from "crypto";
+import { env } from "../config/env";
 
 export default class AuthService {
   static async login(loginData: LoginRequestBody) {
@@ -38,11 +39,11 @@ export default class AuthService {
       user.lastLogin = new Date();
       await user.save();
 
-      const expiresIn = (process.env.JWT_EXPIRES_IN || "1h") as StringValue;
+      const expiresIn = env.JWT_EXPIRES_IN as StringValue;
 
       const token = jwt.sign(
         { userId: user._id.toString(), username: user.username, role: user.role},
-        process.env.JWT_SECRET!,
+        env.JWT_SECRET,
         { expiresIn }
       );
 
