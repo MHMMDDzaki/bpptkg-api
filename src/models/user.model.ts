@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 import { IUser } from "../interfaces/user.interface";
 
@@ -6,6 +6,18 @@ const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    // BARU: Tambahkan field role dan status
+    role: {
+      type: String,
+      enum: ["superadmin", "admin"],
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "active", "suspended"],
+      default: "pending",
+      required: true,
+    },
     lastLogin: { type: Date },
     failedLoginAttempt: { type: Number, default: 0 },
     isLocked: { type: Boolean, default: false },

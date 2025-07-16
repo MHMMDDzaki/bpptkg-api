@@ -3,6 +3,7 @@ import googleDriveService from "../services/googleDrive.service";
 import { IFile, IFileResponse } from "../interfaces/file.interface";
 import mongoose from "mongoose";
 import RsamConfig from "../models/rsamConfig.model";
+import { env } from "../config/env";
 
 export default class FileController {
   static uploadMP3: RequestHandler<{}, IFileResponse> = async (req, res, next) => { // Tambahkan 'next'
@@ -26,7 +27,7 @@ export default class FileController {
 
       // Pastikan ID ini valid atau didapatkan secara dinamis sesuai kebutuhan aplikasi Anda
       // Jika ID ini tidak ada di database, maka RsamConfig.findById akan mengembalikan null
-      const docIdString = process.env.RSAM_CONFIG_ID; // Sebaiknya ID ini dinamis
+      const docIdString = env.RSAM_CONFIG_ID;
       const docId = new mongoose.Types.ObjectId(docIdString);
 
       const rsamConfigDoc = await RsamConfig.findOne({ _id: docId });

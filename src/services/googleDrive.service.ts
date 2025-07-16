@@ -1,6 +1,7 @@
 import { google } from "googleapis";
 import { Readable } from "stream";
 import { IFile, IGoogleDriveResponse } from "../interfaces/file.interface";
+import { env } from "../config/env";
 
 const keyFile = "./google-credentials.json";
 
@@ -32,7 +33,7 @@ export default {
 
   async uploadMP3(file: IFile): Promise<IGoogleDriveResponse> {
     try {
-      const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID!;
+      const folderId = env.GOOGLE_DRIVE_FOLDER_ID;
       
       // 🔍 Cek apakah ada file lama
       const oldFileId = await this.findOldAudioFile(folderId);

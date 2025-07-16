@@ -1,9 +1,14 @@
-import { Document, Types } from 'mongoose';
+import { Document, Types } from "mongoose";
+
+export type UserRole = 'superadmin' | 'admin';
+export type UserStatus = 'pending' | 'active' | 'suspended';
 
 export interface IUser extends Document {
   _id: Types.ObjectId;
   username: string;
   password: string;
+  role: UserRole;
+  status: UserStatus;
   lastLogin?: Date;
   failedLoginAttempt: number;
   isLocked: boolean;
@@ -15,5 +20,7 @@ export interface IUser extends Document {
 export interface IUserResponse {
   id: string;
   username: string;
+  role: UserRole;
+  status: UserStatus;
   lastLogin?: Date;
 }

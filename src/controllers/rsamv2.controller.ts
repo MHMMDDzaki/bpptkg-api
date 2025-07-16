@@ -28,7 +28,7 @@ export const getRsamDataByRange = async (req: Request, res: Response): Promise<v
     if (!range) {
       res.status(400).json({
         error: 'Missing range parameter',
-        validRanges: ['30m', '1h', '2h', '4h', '8h', '16h', '1d', '2d']
+        validRanges: ['3h', '6h', '12h', '24h', '48h']
       });
       return;
     }
@@ -41,7 +41,7 @@ export const getRsamDataByRange = async (req: Request, res: Response): Promise<v
     if (error.message.includes('Invalid time range')) {
       res.status(400).json({
         error: error.message,
-        validRanges: ['30m', '1h', '2h', '4h', '8h', '16h', '1d', '2d']
+        validRanges: ['3h', '6h', '12h', '24h', '48h']
       });
       return;
     }

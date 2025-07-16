@@ -3,6 +3,7 @@ import User from "../models/user.model";
 import jwt from "jsonwebtoken";
 import { StringValue } from "ms";
 import * as crypto from "crypto";
+import { env } from "../config/env";
 
 export default class AuthService {
   static async login(loginData: LoginRequestBody) {
@@ -24,15 +25,25 @@ export default class AuthService {
         throw new Error("Invalid credentials");
       }
 
+      if (user.status !== "active") {
+        if (user.status === "pending") {
+          throw new Error(
+            "Your account is pending approval and cannot log in."
+          );
+        }
+        // Anda bisa menambahkan penanganan untuk status lain seperti 'suspended'
+        throw new Error("Your account is not active.");
+      }
+
       user.failedLoginAttempt = 0;
       user.lastLogin = new Date();
       await user.save();
 
-      const expiresIn = (process.env.JWT_EXPIRES_IN || "1h") as StringValue;
-      
+      const expiresIn = env.JWT_EXPIRES_IN as StringValue;
+
       const token = jwt.sign(
-        { userId: user._id.toString(), username: user.username },
-        process.env.JWT_SECRET!,
+        { userId: user._id.toString(), username: user.username, role: user.role},
+        env.JWT_SECRET,
         { expiresIn }
       );
 
@@ -41,8 +52,8 @@ export default class AuthService {
         user: {
           id: user._id.toString(),
           username: user.username,
-          lastLogin: user.lastLogin
-        }
+          lastLogin: user.lastLogin,
+        },
       };
     } catch (error) {
       throw error;
@@ -67,12 +78,16 @@ export default class AuthService {
     }
   }
 
-  static async resetPassword(username: string, token: string, newPassword: string) {
+  static async resetPassword(
+    username: string,
+    token: string,
+    newPassword: string
+  ) {
     try {
       const user = await User.findOne({
         username,
         resetPasswordToken: token,
-        resetPasswordExpires: { $gt: new Date() }
+        resetPasswordExpires: { $gt: new Date() },
       });
 
       if (!user) throw new Error("Token invalid atau kadaluarsa");
