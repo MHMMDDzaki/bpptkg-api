@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "6810a65fc99ff35d7545ec00"
+  },
+  "username": "Admin",
+  "password": "$2b$10$J.45n3fpUT1dFNgyUQUnFOx1DKsIitfb4sO2NK9x8b0qWNdOr5xv.",
+  "lastLogin": {
+    "$date": "2025-07-08T07:38:57.848Z"
+  },
+  "failedLoginAttempt": 0,
+  "isLocked": false,
+  "role": "superadmin",
+  "status": "active"
+}]

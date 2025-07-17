@@ -1,0 +1,9 @@
+[{
+  "_id": {
+    "$oid": "6810a7f1c99ff35d7545ec02"
+  },
+  "trigger_on": 400,
+  "trigger_off": 120,
+  "audio_url": "https://drive.google.com/uc?export=download&id=1Sr9h0-TdSvG6m0CYqTyosFOUmxwNWpED",
+  "audio_name": "1751610285150_audio"
+}]

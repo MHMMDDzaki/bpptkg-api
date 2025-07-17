@@ -66,7 +66,7 @@ export default {
 
     } catch (error) {
       console.error('Google Drive Error:', error);
-      throw new Error('Gagal mengupload file MP3');
+      throw new Error(`Gagal mengupload file MP3: ${error}`);
     }
   }
 };
