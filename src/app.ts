@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import cors from "cors";
+import path from "path";
 import connectDB from "./config/db";
 import rsamConfigRoutes from "./routes/rsamConfig.routes";
 import authRoutes from "./routes/auth.routes";
@@ -8,6 +9,7 @@ import fileRoutes from "./routes/file.routes";
 import RsamRoutes from "./routes/rsam.routes";
 import rsamRoutesv2 from "./routes/rsamv2.routes";
 import multer from "multer";
+import { env } from "./config/env";
 
 class App {
   public app: Application;
@@ -23,6 +25,7 @@ class App {
   private config(): void {
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use('/uploads', express.static(env.UPLOAD_DIR));
   }
 
   private connectDatabase(): void {

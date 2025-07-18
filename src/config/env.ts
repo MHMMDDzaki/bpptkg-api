@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import path from "path";
 import { z } from "zod";
 
 dotenv.config();
@@ -21,6 +22,12 @@ const envSchema = z.object({
   GOOGLE_DRIVE_FOLDER_ID: z
     .string()
     .min(1, { message: "Folder ID Google Drive harus ada" }),
+
+  // Base URL for constructing file links
+  BASE_URL: z.string().url({ message: "BASE_URL must be a valid URL" }),
+
+  // Path for local file uploads
+  UPLOAD_DIR: z.string().min(1, { message: "UPLOAD_DIR cannot be empty" }).default(path.join(process.cwd(), 'uploads')),
 
   // Konfigurasi API Eksternal (BPPTKG)
   API_BPPTKG: z

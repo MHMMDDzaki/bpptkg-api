@@ -18,8 +18,8 @@ export interface IFileResponse {
   message?: string;
 }
 
-export interface IGoogleDriveResponse {
-  id: string;
-  url: string;
+export interface ILocalFileResponse {
+  path: string;
   name: string;
+  url: string;
 }
